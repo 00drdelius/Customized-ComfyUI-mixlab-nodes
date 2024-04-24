@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mixlab APP</title>
     <style>
+        .download_btn{
+            width: 150px;
+            height: 50px;
+            border-radius: 20px;
+            background-color: rgb(255, 204, 108);
+            transition: background-color 1s;
+            font-size: 15px;
+        }
+        .download_btn:hover{
+            background-color: rgb(255, 242, 199);
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -440,7 +452,6 @@
     <a id="author"></a>
     <!-- <script type="module" src="https://cdn.bootcdn.net/ajax/libs/photoswipe/5.4.0/photoswipe-lightbox.esm.min.js"></script> -->
     <script type="module">
-        console.log(".....");
         import PhotoSwipeLightbox from '/extensions/Customized-ComfyUI-mixlab-nodes/lib/photoswipe-lightbox.esm.min.js'
         // console.log(Lightbox)
 
@@ -868,10 +879,6 @@
             const action = document.createElement('div');
             container.appendChild(action)
 
-            const copyHTML = document.createElement('button');
-            copyHTML.innerText = 'copy as html'
-            action.appendChild(copyHTML)
-
             const copyImage = document.createElement('button');
             copyImage.innerText = 'copy image'
             action.appendChild(copyImage)
@@ -926,6 +933,10 @@
             output_card.className = 'output_card'
             container.appendChild(output_card)
 
+            var download_btn=createDownloadBtn();
+            download_btn.innerText="尚未生成图片";
+            container.appendChild(download_btn);
+
             if (window._appData.share_prefix) {
                 const copyText = document.createElement('button');
                 copyText.innerText = 'copy text for share'
@@ -942,11 +953,6 @@
                 // copyHtmlWithImagesToClipboard(output_card.outerHTML)
                 copyImagesToClipboard(output_card.outerHTML, (r) => success(r, copyImage, 'copy image'))
                 // copyTextToClipboard()
-            })
-            copyHTML.addEventListener('click', e => {
-                e.preventDefault();
-                copyHtmlWithImagesToClipboard((window._appData.share_prefix || '') + " " + output_card.outerHTML, (r) => success(r, copyHTML, 'copy as html'))
-                // copyImagesToClipboard(output_card.outerHTML)
             })
 
             //是否显示复制图片，复制html两个按钮
@@ -987,7 +993,7 @@
 
                     let img = new Image();
                     // img;
-                    img.src = window._appData?.icon || base64Df;
+                    // img.src = window._appData?.icon || base64Df;
                     a.appendChild(img)
                     output_card.appendChild(a);
                     isShowImageFn = true;
@@ -1040,7 +1046,6 @@
 
             if (isShowImageFn === false) {
                 copyImage.remove();
-                copyHTML.remove();
             }
 
             return container
@@ -1787,15 +1792,16 @@
         ) {
 
             value = 'float' ? parseFloat(value.toFixed(3)) : parseInt(value)
-            try {
-                let i = parseFloat(localStorage.getItem(`_slider_${targetId}`))
-                if (!!i) {
-                    value = i;
-                    callback && callback(value)
-                }
-            } catch (error) {
+            // 下注释代码的作用：每次刷新后，设置slider.value值为上次localStorage所存。
+            // try {
+            //     let i = parseFloat(localStorage.getItem(`_slider_${targetId}`))
+            //     if (!!i) {
+            //         value = i;
+            //         callback && callback(value)
+            //     }
+            // } catch (error) {
 
-            }
+            // }
 
             // 输入div
             let inputDiv = document.createElement('div');
@@ -1808,7 +1814,7 @@
             slider.max = maxValue;
             slider.step = type == 'float' ? 0.01 : 1
             slider.value = value;
-            slider.style.width = '150px'
+            slider.style.width = '300px'
 
             // 创建标签元素
             var label = document.createElement("label");
@@ -1869,11 +1875,13 @@
             inputDiv.appendChild(slider);
             container.appendChild(inputDiv)
 
+            // 先行修改为初始值
+            callback(value);
             // 添加change事件监听器
             slider.addEventListener("input", function (event) {
                 var value = event.target.value;
                 value = type == 'float' ? value : Math.round(value)
-                console.log("滑块输入的值为：" + value);
+                // console.log("滑块输入的值为：" + value);
                 label.setAttribute('data-content', value);
                 // 在这里可以执行其他操作，根据需要进行相应的处理
                 callback && callback(value)
@@ -2057,7 +2065,7 @@
             titleDiv.className = 'header'
 
             var title = document.createElement('h1');
-            title.textContent = 'My Application';
+            title.textContent = 'PhotoMaker-Test';
             titleDiv.appendChild(title);
 
             if (share) {
@@ -2072,20 +2080,19 @@
                 titleDiv.appendChild(shareBtn);
             }
 
+            //删去description
+            // let iconDes = document.createElement('div');
+            // // 创建应用图标
+            // var icon = document.createElement('img');
+            // icon.style.width = '48px';
+            // // icon.style.height = '98px';
+            // icon.src = base64Df;
 
-
-            let iconDes = document.createElement('div');
-            // 创建应用图标
-            var icon = document.createElement('img');
-            icon.style.width = '48px';
-            // icon.style.height = '98px';
-            icon.src = base64Df;
-
-            var des = document.createElement('p');
-            des.style = `margin-left: 12px; font-size: 14px;`
-            iconDes.appendChild(icon)
-            iconDes.appendChild(des);
-            iconDes.className = 'description'
+            // var des = document.createElement('p');
+            // des.style = `margin-left: 12px; font-size: 14px;`
+            // iconDes.appendChild(icon)
+            // iconDes.appendChild(des);
+            // iconDes.className = 'description'
 
             // 创建状态标签
             let statusDiv = document.createElement('div');
@@ -2096,6 +2103,7 @@
 
             // seed 汇总
             var seeds = document.createElement('details');
+            seeds.style="margin-left:-5px";
             // seeds.textContent = 'Status';
             seeds.className = 'seeds';
 
@@ -2153,19 +2161,12 @@
                 console.log(error)
             }
 
-            // new update: advanced config
-            try{
-                
-            } catch (error) {
-                console.log(error)
-            }
-            // new update: advanced config
-
             statusDiv.appendChild(status);
             statusDiv.appendChild(seeds);
 
             // 创建高级设置
             var advanced=document.createElement("details");
+            advanced.style="margin-bottom: 10px";
             advanced.className="advanced-config";
             let advanced_title=document.createElement("summary");
             advanced_title.innerText="高级设置";
@@ -2176,8 +2177,6 @@
             // 创建输入框
             var input1 = createInputs(inputData)
 
-            advanced.appendChild(input1);
-
             var output = createOutputs(outputData, link)
 
             // 创建提交按钮
@@ -2187,11 +2186,11 @@
 
             // 将所有UI元素添加到页面中
             leftDiv.appendChild(titleDiv);
-            leftDiv.appendChild(iconDes);
+            // leftDiv.appendChild(iconDes);
             // leftDiv.appendChild(des);
             leftDiv.appendChild(statusDiv);
             leftDiv.append(advanced);
-            // leftDiv.appendChild(input1);
+            leftDiv.appendChild(input1);
             mainDiv.appendChild(submitButton);
 
             rightDiv.appendChild(output);
@@ -2215,18 +2214,18 @@
                         title.textContent = newTitle;
                     }
                 },
-                icon: {
-                    element: icon,
-                    update: function (newIconPath) {
-                        icon.src = newIconPath;
-                    }
-                },
-                des: {
-                    element: des,
-                    update: function (text) {
-                        des.textContent = text;
-                    }
-                },
+                // icon: {
+                //     element: icon,
+                //     update: function (newIconPath) {
+                //         icon.src = newIconPath;
+                //     }
+                // },
+                // des: {
+                //     element: des,
+                //     update: function (text) {
+                //         des.textContent = text;
+                //     }
+                // },
                 status: {
                     element: status,
                     update: function (newStatus) {
@@ -2254,7 +2253,6 @@
                             a.setAttribute('data-pswp-height', im.naturalHeight);
                             a.setAttribute('target', "_blank");
                             a.setAttribute('href', val);
-
                         }
 
                         if (val && (type == "images" || type == 'images_prompts') && output.querySelector(`#output_${id} img`)) {
@@ -2262,7 +2260,7 @@
                             imgDiv.style.display = 'none';
 
                             // 清空
-                            // Array.from(imgDiv.parentElement.querySelectorAll('.output_images'), im => im.remove());
+                            Array.from(imgDiv.parentElement.querySelectorAll('.output_images'), im => im.remove());
 
                             for (const v of val) {
 
@@ -2301,6 +2299,7 @@
 
                                 // imgDiv.parentElement.appendChild(a);
                                 imgDiv.parentElement.insertBefore(a, imgDiv.parentElement.firstChild);
+                                dlBtnBind("图片下载",url);
                             }
 
                         }
@@ -2372,6 +2371,7 @@
                             }
 
                         }
+
                     }
                 },
                 submitButton: {
@@ -2538,7 +2538,7 @@
             }
         }
 
-        async function createApp(appData, share = true) {
+        async function createApp(appData, share = false) {
             // console.log(appData)
             // 使用示例：
             var ui = createUI(appData, share);
@@ -2547,9 +2547,9 @@
             ui.title.update(appData.name || 'Mixlab APP');
 
             // 更新应用图标
-            ui.icon.update(appData.icon || base64Df);
+            // ui.icon.update(appData.icon || base64Df);
 
-            ui.des.update(appData.description || '-');
+            // ui.des.update(appData.description || '-');
 
             // 更新状态标签
             ui.status.update(appData ? 'READY' : '-');
@@ -3063,7 +3063,7 @@
             var KSamplerEle = document.createElement('details');
             KSamplerEle.innerHTML=`<summary>KSampler</summary>\n`;
             KSamplerEle.innerHTML+=`<div class="ksampler-config"> <div>`;
-            KSamplerEle.style="margin-bottom: 20px;"
+            KSamplerEle.style="margin-bottom: 10px;"
             const kconfigInput = KSamplerEle.querySelector(".ksampler-config");
             kconfigInput.style = `outline: 1px dashed gray;margin-bottom: 12px;margin-top: 12px;`
 
@@ -3073,21 +3073,21 @@
             em.appendChild(emText);
 
             var steps=createNumSlide(
-                `steps`, 0,
+                `steps`, 50,
                 (newSteps)=>updateKSampler(KSamplerId,"steps",newSteps),
                 0,100, 'int',
                 null, null,
                 false
             );
             var cfg=createNumSlide(
-                `cfg`, 0,
+                `cfg`, 5.0,
                 (newcfg)=>updateKSampler(KSamplerId,"cfg",newcfg),
                 0,100, 'float',
                 null, null,
                 false
             );
             var denoise=createNumSlide(
-                `denoise`, 0,
+                `denoise`, 1.0,
                 (newdenoise)=>updateKSampler(KSamplerId,"denoise",newdenoise),
                 0,1, 'float',
                 null,null,
@@ -3127,6 +3127,24 @@
 
             KSamplerEle.appendChild(kconfigInput);
             return KSamplerEle;
+        }
+
+        function createDownloadBtn(){
+            var dl_btn=document.createElement('button');
+            dl_btn.className="download_btn";
+            return dl_btn;
+        }
+
+        function dlBtnBind(dlbtn_text,img_src){
+            dl_btn=document.querySelector(".download_btn");
+            dl_btn.innerText=dlbtn_text;
+            dl_btn.addEventListener("click",()=>{
+                var dl_link=document.createElement('a');
+                dl_link.src=img_src;
+                dl_link.image=img_src;
+                dl_link.dispatchEvent(new MouseEvent("click"));
+                dl_link.remove();
+            })
         }
     </script>
 

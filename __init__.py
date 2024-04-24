@@ -331,6 +331,7 @@ def get_prompt_result():
         with open(prompt_result_path) as json_file:
             prompt_result = json.load(json_file)
     res=list(prompt_result.values())
+    res=res[-10:] #设置历史生成结果上限
     # print(res)
     return res
 
