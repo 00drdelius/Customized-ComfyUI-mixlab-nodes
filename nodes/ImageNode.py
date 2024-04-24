@@ -620,11 +620,7 @@ def detect_faces(image):
 
 def areaToMask(x,y,w,h,image):
     # 创建一个与原图片大小相同的空白图片
-<<<<<<< HEAD
     mask = Image.new('L', image.size)
-=======
-    mask = Image.new('1', image.size)
->>>>>>> origin/main
 
     # 创建一个可用于绘制的对象
     draw = ImageDraw.Draw(mask)
@@ -2159,7 +2155,6 @@ class GridOutput:
     def INPUT_TYPES(s):
         return { 
             "required": {
-<<<<<<< HEAD
                 "grid": ("_GRID",),
                 
             },
@@ -2170,14 +2165,6 @@ class GridOutput:
     
     RETURN_TYPES = ("INT","INT","INT","INT","MASK",)
     RETURN_NAMES = ("x","y","width","height","mask",)
-=======
-                "grid": ("_GRID",)
-            }
-                }
-    
-    RETURN_TYPES = ("INT","INT","INT","INT",)
-    RETURN_NAMES = ("x","y","width","height",)
->>>>>>> origin/main
 
     FUNCTION = "run"
 
@@ -2186,7 +2173,6 @@ class GridOutput:
     INPUT_IS_LIST = False
     # OUTPUT_IS_LIST = (True,)
 
-<<<<<<< HEAD
     def run(self,grid,bg_image=None):
         x,y,w,h=grid
         x=int(x)
@@ -2207,11 +2193,6 @@ class GridOutput:
         if len(masks)>0:
             out = torch.cat(masks, dim=0)
         return (x,y,w,h,out,)
-=======
-    def run(self,grid):
-        x,y,w,h=grid
-        return (x,y,w,h,)
->>>>>>> origin/main
 
 
 
