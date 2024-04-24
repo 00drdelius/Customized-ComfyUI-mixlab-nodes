@@ -1,7 +1,7 @@
 # Customized-ComfyUI-Mixlab-Nodes
 
 > Original Codebase:
-> [shadowcz007/comfyui-mixlab-nodes](https://github.com/shadowcz007/comfyui-mixlab-nodes)
+> [shadowcz007/comfyui-mixlab-nodes](https://github.com/shadowcz007/comfyui-mixlab-nodes)  
 > Aligned version: v0.22.0
 
 # Revision compared with Origin
