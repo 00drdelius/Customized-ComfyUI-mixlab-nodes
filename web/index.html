@@ -242,8 +242,8 @@
 
         .output_card img,
         video {
-            max-width: 200px;
-            max-height: 600px;
+            width: 500px;
+            height: 600px;
             margin: 8px;
             min-width: 200px;
             box-shadow: 0px 0px 20px 7px #e6e7e7;
@@ -876,13 +876,16 @@
             const container = document.createElement('div');
             container.className = "output";
 
-            const action = document.createElement('div');
-            container.appendChild(action)
+            var download_btn=createDownloadEles();
+            container.appendChild(download_btn);
 
-            const copyImage = document.createElement('button');
-            copyImage.innerText = 'copy image'
-            action.appendChild(copyImage)
-            copyImage.style.marginLeft = '18px';
+            // const action = document.createElement('div');
+            // container.appendChild(action)
+
+            // const copyImage = document.createElement('button');
+            // copyImage.innerText = 'copy image'
+            // action.appendChild(copyImage)
+            // copyImage.style.marginLeft = '18px';
 
             let isURL = false;
             try {
@@ -933,10 +936,6 @@
             output_card.className = 'output_card'
             container.appendChild(output_card)
 
-            var download_btn=createDownloadBtn();
-            download_btn.innerText="尚未生成图片";
-            container.appendChild(download_btn);
-
             if (window._appData.share_prefix) {
                 const copyText = document.createElement('button');
                 copyText.innerText = 'copy text for share'
@@ -948,12 +947,12 @@
                 })
             }
 
-            copyImage.addEventListener('click', e => {
-                e.preventDefault();
-                // copyHtmlWithImagesToClipboard(output_card.outerHTML)
-                copyImagesToClipboard(output_card.outerHTML, (r) => success(r, copyImage, 'copy image'))
-                // copyTextToClipboard()
-            })
+            // copyImage.addEventListener('click', e => {
+            //     e.preventDefault();
+            //     // copyHtmlWithImagesToClipboard(output_card.outerHTML)
+            //     copyImagesToClipboard(output_card.outerHTML, (r) => success(r, copyImage, 'copy image'))
+            //     // copyTextToClipboard()
+            // })
 
             //是否显示复制图片，复制html两个按钮
             let isShowImageFn = false;
@@ -1044,9 +1043,9 @@
 
             }
 
-            if (isShowImageFn === false) {
-                copyImage.remove();
-            }
+            // if (isShowImageFn === false) {
+            //     copyImage.remove();
+            // }
 
             return container
         }
@@ -3129,22 +3128,29 @@
             return KSamplerEle;
         }
 
-        function createDownloadBtn(){
+        function createDownloadEles(){
             var dl_btn=document.createElement('button');
             dl_btn.className="download_btn";
+            dl_btn.innerText="尚未生成图片";
+            dl_btn.addEventListener("click",()=>{
+            if (dl_link.href!="#"){
+                    dl_link.dispatchEvent(new MouseEvent("click"));
+                }
+            })
+            var dl_link=document.createElement('a');
+            dl_link.className="download_link";
+            dl_link.style="display:none";
+            dl_link.href="#";
+            document.body.appendChild(dl_link);
             return dl_btn;
         }
-
-        function dlBtnBind(dlbtn_text,img_src){
-            dl_btn=document.querySelector(".download_btn");
-            dl_btn.innerText=dlbtn_text;
-            dl_btn.addEventListener("click",()=>{
-                var dl_link=document.createElement('a');
-                dl_link.src=img_src;
-                dl_link.image=img_src;
-                dl_link.dispatchEvent(new MouseEvent("click"));
-                dl_link.remove();
-            })
+        
+        function dlBtnBind(btn_name, img_src){
+            var dl_btn=document.querySelector(".download_btn");
+            var dl_link=document.querySelector(".download_link");
+            dl_btn.innerText=btn_name;
+            dl_link.href=img_src;
+            dl_link.download=img_src;
         }
     </script>
 
