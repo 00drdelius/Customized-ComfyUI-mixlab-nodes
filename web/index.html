@@ -775,7 +775,7 @@
         }
 
 
-        function queuePrompt(appInfo, promptWorkflow, seed, client_id) {
+        function queuePrompt(appInfo, promptWorkflow, seed, client_id, origin_workflow) {
             // appinfo升级后 兼容，补丁
             for (const id in promptWorkflow) {
                 if (promptWorkflow[id].class_type == 'AppInfo') {
@@ -786,7 +786,11 @@
             promptWorkflow = randomSeed(seed, promptWorkflow);
 
             let url = get_url()
-            const data = JSON.stringify({ prompt: promptWorkflow, client_id });
+            const data = JSON.stringify({
+                client_id: client_id,
+                prompt: promptWorkflow,
+                extra_data: { extra_pnginfo: { origin_workflow } },
+            });
             fetch(`${url}/prompt`, {
                 method: 'POST',
                 headers: {
@@ -838,7 +842,8 @@
                     if (app.filename) data.push({
                         ...app,
                         data: output,
-                        date: res.date
+                        date: res.date,
+                        origin_workflow: res.workflow
                     })
                 }
             } catch (error) {
@@ -2560,7 +2565,8 @@
                         icon: window._appData.icon,
                         category: window._appData.category,
                         filename: window._appData.filename
-                    }, window._appData.data, window._appData.seed, api.clientId);
+                    }, window._appData.data, window._appData.seed, api.clientId,
+                    window._appData.origin_workflow);
                 }, () => {
                     // 取消
                     if (api.runningCancel) {
