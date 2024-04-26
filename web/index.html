@@ -789,7 +789,7 @@
             const data = JSON.stringify({
                 client_id: client_id,
                 prompt: promptWorkflow,
-                extra_data: { extra_pnginfo: { origin_workflow } },
+                extra_data: { extra_pnginfo: { workflow: origin_workflow } },
             });
             fetch(`${url}/prompt`, {
                 method: 'POST',
