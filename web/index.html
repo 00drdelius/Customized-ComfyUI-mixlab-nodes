@@ -1568,7 +1568,7 @@
                         } else {
                             window._appData.data[data.id].inputs.text = textInput.value;
                             // **photomaker clip encode 特殊处理！**
-                            if (textInput.title.toLowerCase().includes("positive") && window.hasAttribute("photoMakerEncodePlus_id")){
+                            if (textInput.title.toLowerCase().includes("positive") && window.hasOwnProperty("photoMakerEncodePlus_id")){
                                 window._appData.data[window.photoMakerEncodePlus_id].inputs.text=textInput.value;
                             }
                             // **photomaker clip encode 特殊处理！**
