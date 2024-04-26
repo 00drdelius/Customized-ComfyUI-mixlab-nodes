@@ -843,7 +843,7 @@
                         ...app,
                         data: output,
                         date: res.date,
-                        origin_workflow: res.data.workflow
+                        origin_workflow: res.workflow
                     })
                 }
             } catch (error) {
@@ -3030,13 +3030,17 @@
 
         }
 
-        function updateKSampler(KSampler_id, name, val){
+        function updateKSampler(KSampler_id, name, type, val){
+            if (!["string",'float','int'].includes(type)){
+                throw new Error(`param in Ksampler update only support string,float and int, input type: ${type}`)
+            }
             if (
                 !["steps","cfg","sampler_name","scheduler","denoise"].includes(name)
             ){ throw new Error(`KSampler doesn't have param: ${name} !!`)}
             var kSampler = window._appData.data[KSampler_id];
             if (kSampler.class_type!="KSampler") {throw new Error("id Passed in not KSampler's!!")}
             else {
+                if(type=='float'){val=parseFloat(val)} else if(type=='int') {val=parseInt(val)};
                 kSampler.inputs[name]=val;
             }
         }
@@ -3076,21 +3080,21 @@
 
             var steps=createNumSlide(
                 `steps`, 50,
-                (newSteps)=>updateKSampler(KSamplerId,"steps",newSteps),
+                (newSteps)=>updateKSampler(KSamplerId,"steps",'int',newSteps),
                 0,100, 'int',
                 null, null,
                 false
             );
             var cfg=createNumSlide(
                 `cfg`, 5.0,
-                (newcfg)=>updateKSampler(KSamplerId,"cfg",newcfg),
+                (newcfg)=>updateKSampler(KSamplerId,"cfg",'float',newcfg),
                 0,100, 'float',
                 null, null,
                 false
             );
             var denoise=createNumSlide(
                 `denoise`, 1.0,
-                (newdenoise)=>updateKSampler(KSamplerId,"denoise",newdenoise),
+                (newdenoise)=>updateKSampler(KSamplerId,"denoise",'float',newdenoise),
                 0,1, 'float',
                 null,null,
                 false
@@ -3105,7 +3109,7 @@
             )
             selectDom1.addEventListener('change', e=>{
                 e.preventDefault();
-                updateKSampler(KSamplerId, "sampler_name", selectDom1.value)
+                updateKSampler(KSamplerId, "sampler_name", 'string',selectDom1.value)
             })
 
             let [div_scheduler, selectDom2] = createSelectWithOptions(
@@ -3117,7 +3121,7 @@
             )
             selectDom2.addEventListener('change', e=>{
                 e.preventDefault();
-                updateKSampler(KSamplerId, "scheduler", selectDom2.value)
+                updateKSampler(KSamplerId, "scheduler", 'string',selectDom2.value)
             })
 
             //添加至总UI
