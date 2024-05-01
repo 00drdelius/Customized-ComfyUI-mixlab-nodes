@@ -577,6 +577,13 @@ async def post_prompt_result(request):
     
     return web.json_response({"result":res})
 
+### test
+@routes.get("/mixlab/test")
+async def test(request):
+    html="<div>Hello World!</div>"
+    return web.Response(body=html,status=200,content_type='text/html')
+
+
 # 扩展api接口
 # from server import PromptServer
 # from aiohttp import web

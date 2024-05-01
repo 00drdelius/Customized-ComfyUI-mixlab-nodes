@@ -1,0 +1,437 @@
+.download_btn{
+    width: 150px;
+    height: 50px;
+    border-radius: 20px;
+    background-color: rgb(0, 0, 0);
+    transition: background-color 0.6s;
+    font-size: 15px;
+    color: whitesmoke;
+}
+.download_btn:hover{
+    background-color: rgb(181, 181, 181);;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.app {
+    display: flex;
+    width: 90%;
+    min-width: 400px;
+    margin-left: 5%;
+    user-select: none;
+    margin-top: 32px;
+}
+
+.apps {
+    margin: 0 32px;
+    background: whitesmoke;
+    color: black;
+    padding: 12px;
+    cursor: pointer;
+    margin: 8px 44px;
+}
+
+.apps .content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.apps .card {
+    width: 320px;
+    margin: 12px;
+    display: flex;
+    flex-direction: row;
+    background: #ffffff;
+    cursor: pointer;
+    user-select: none;
+}
+
+#history_container .card {
+    width: 200px;
+    margin: 12px;
+    display: flex;
+    flex-direction: row;
+    background: #ffffff;
+    cursor: pointer;
+    user-select: none;
+}
+
+.selected {
+    box-shadow: 0px 0px 10px 10px #fbe9f0
+}
+
+.card:hover {
+    box-shadow: 0px 0px 10px 10px #e9fbfa
+}
+
+.card h5 {
+    font-size: 14px;
+    margin: 0 0 10px 0
+}
+
+.card p {
+    margin: 0;
+    padding: 0;
+    /* max-height: 35px; */
+    overflow: hidden;
+    /* width: 98px; */
+}
+
+.apps .card img {
+    width: auto;
+    height: 100%;
+    margin: 0px;
+}
+
+#history_container .card img {
+    width: auto;
+    height: 100%;
+    margin: 0px;
+}
+
+.toggle {
+    border: none;
+}
+
+.card .item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.card .icon {
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    background: #e3e3e3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card .version {
+    font-size: 12px;
+}
+
+.card .toggle {
+    margin-left: 12px;
+    background: none;
+    color: black;
+}
+
+.card .toggle:hover {
+    color: #7f7f7f !important;
+}
+
+em .toggle:hover {
+    color: #7f7f7f !important;
+}
+
+.status_seed {
+    display: flex;
+    flex-direction: column;
+    margin: 12px;
+}
+
+.seeds {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.status {
+    background: black;
+    color: white;
+    display: flex;
+    width: fit-content;
+    padding: 4px;
+    font-size: 12px;
+
+}
+
+.description {
+    display: flex;
+    margin: 12px;
+    background: white;
+    padding: 8px;
+    width: 80%;
+}
+
+.description p {
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+.description img {
+    min-height: unset !important;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    /* background: #eee; */
+    margin: 24px;
+    flex: 1;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.panel .header {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.panel h1 {
+    padding: 0 12px;
+    margin: 0;
+}
+
+.panel img,
+video {
+    height: fit-content;
+    width: fit-content;
+    max-width: 100%;
+    margin-left: 12px;
+    /*min-height: 200px;*/
+}
+
+.input_card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.output {
+    width: 90%;
+    margin: 12px;
+}
+
+.output_card {
+    /* height: 100%; */
+    width: 100%;
+
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: center;
+    align-items: center; */
+
+}
+
+.output_card img,
+video {
+    width: 295px;
+    height: 413px;
+    margin: 8px;
+    margin-top: 200px;
+    min-width: 200px;
+    box-shadow: 0px 0px 20px 7px #e6e7e7;
+}
+
+.card {
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    font-size: 12px;
+}
+
+.card textarea {
+    width: 100%;
+    height: 90px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    margin-top: 12px;
+    resize: none;
+    overflow: hidden;
+    padding-left: 5px;
+}
+
+.card img {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.card .select {
+    margin-top: 12px;
+}
+
+.run_btn {
+    background: black;
+    color: white;
+    width: 88px;
+    height: 88px;
+    position: fixed;
+    bottom: 72px;
+    left: calc(50% - 44px);
+    border-radius: 100%;
+    cursor: pointer;
+    border: 3px solid;
+    z-index: 100;
+    transition: background 0.6s;
+}
+
+.run_btn:hover {
+    background: rgb(181, 181, 181);
+}
+
+button:hover {
+    /* border-color: yellow !important; */
+    color: #ffffff !important;
+    /* font-weight: 400; */
+    background: #232222;
+    cursor: pointer;
+}
+
+.disabled {
+    background-color: #eee !important;
+    color: #4a4a4a !important;
+}
+
+.upload_btn {
+    width: 188px;
+    cursor: pointer;
+    /* height: 188px; */
+    /* background: black; */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    color: black;
+}
+
+/* .upload_btn:hover {
+    outline: 4px solid yellow;
+    color: yellow;
+} */
+
+.show_text {
+    font-size: 14px;
+    user-select: text;
+    margin: 8px;
+    padding: 32px;
+    min-width: 200px;
+    background: #242424;
+    color: white;
+}
+
+.link {
+    text-decoration: none;
+    color: gray;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+label::after {
+    content: attr(data-content);
+    /* Set the initial content using the data-content attribute */
+    /* position: absolute; */
+    /* top: 100%;
+    left: 0; */
+    margin-left: 4px;
+    font-size: 12px;
+    color: #555;
+}
+
+
+.card select,
+.card button,
+.card input {
+    height: 32px;
+    cursor: pointer;
+    background: #000000bf;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    margin-top: 8px;
+    transition: background 0.6s;
+}
+
+
+.pickr .pcr-button {
+    width: 56px !important;
+    height: 56px !important;
+    outline: 1px solid white;
+}
+
+
+/* 给prompt image 节点使用 */
+.prompt_image {
+    color: #2f2f2f;
+    padding: 0 10px;
+    font-size: 12px;
+    width: 200px;
+}
+
+
+/* 图像编辑器 */
+#editor_container {
+    position: fixed;
+    top: 0;
+    z-index: 9;
+    background: #eee;
+    height: 100vh;
+    width: 100%;
+    display: none;
+}
+
+
+/* 图片的字幕 */
+.pswp__custom-caption {
+    background: rgb(20 27 70);
+    font-size: 16px;
+    color: #fff;
+    width: calc(100% - 32px);
+    max-width: 400px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+}
+
+.pswp__custom-caption a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.hidden-caption-content {
+    display: none;
+}
+
+.input_card label{
+    font-size: 20px;
+    font-family: cursive;  
+}
+
+.card_LoadImage {
+    align-items: center;
+}
+
+.card_CLIPTextEncode {
+    align-items: center;
+}
+
+.card button:hover {
+    background: rgb(181, 181, 181);;
+}
+
