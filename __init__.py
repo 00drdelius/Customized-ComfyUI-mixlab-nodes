@@ -561,7 +561,7 @@ async def get_checkpoints(request):
 
 
 @routes.post("/mixlab/prompt_result")
-async def post_prompt_result(request):
+async def post_prompt_result(request:web.Request):
     data = await request.json()
     res=None
     # print(data)
@@ -577,12 +577,61 @@ async def post_prompt_result(request):
     
     return web.json_response({"result":res})
 
+templateGraphics={
+  "white": {
+    "male": {
+      "formal suit": "...photoPath",
+      "school uniform": "...photoPath"
+    },
+    "female": {
+      "formal suit": "...photoPath",
+      "school uniform": "...photoPath"
+    }
+  },
+  "blue": {
+    "male": {
+      "formal suit": "...photoPath",
+      "school uniform": "...photoPath"
+    },
+    "female": {
+      "formal suit": "...photoPath",
+      "school uniform": "...photoPath"
+    }
+  },
+  "red": {
+    "male": {
+      "formal suit": "...photoPath",
+      "school uniform": "...photoPath"
+    },
+    "female": {
+      "formal suit": "...photoPath",
+      "school uniform": "...photoPath"
+    }
+  }
+}
+
+import io
+from PIL import Image
+@routes.get("/mixlab/templateGraphics")
+async def fetchTemplate(request:web.Request):
+    "fetch the template graphic"
+    url_query=request.query
+    background=url_query["background"]
+    gender=url_query['gender']
+    suit=url_query['suit']
+    imgPath=templateGraphics[background][gender][suit]
+    buffer=io.BytesIO()
+    with Image.open(imgPath, 'r') as imgF:
+        img=imgF.convert("RGB")
+        img.save(buffer,format='png')
+    buffer.seek(0)
+    return web.Response(body=buffer,status=200,content_type=f"img/png")
+
 ### test
 @routes.get("/mixlab/test")
 async def test(request):
     html="<div>Hello World!</div>"
     return web.Response(body=html,status=200,content_type='text/html')
-
 
 # 扩展api接口
 # from server import PromptServer
@@ -593,7 +642,6 @@ async def test(request):
 #     post = await request.post()
 #     x = post.get("something")
 #     return web.json_response({})
-
 
 # 导入节点
 from .nodes.PromptNode import GLIGENTextBoxApply_Advanced,EmbeddingPrompt,RandomPrompt,PromptSlide,PromptSimplification,PromptImage,JoinWithDelimiter

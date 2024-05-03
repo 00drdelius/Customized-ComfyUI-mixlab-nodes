@@ -807,6 +807,8 @@ function createInputs(inputData) {
             const nameLabel = document.createElement("label");
             nameLabel.textContent = data.title || (isVideoUpload ? "LoadVideo: " : "LoadImage: ");
             nameLabel.style.marginBottom = '12px'
+
+            uploadContainer.setAttribute("title",nameLabel.textContent);
             uploadContainer.appendChild(nameLabel);
 
             let actionDiv = document.createElement('div');
@@ -1073,7 +1075,7 @@ function createInputs(inputData) {
                         headers: {'Content-Type':'application/json'},
                         body: {type: t},
                     }
-                    syncRequest(requestObj);
+                    syncJsonRequest(requestObj,"__mixlab_folderpaths_response");
                     if (window.hasOwnProperty("__mixlab_folderpaths_response")){
                         respData = window.__mixlab_folderpaths_response;
                     } else {
@@ -1167,7 +1169,9 @@ function createInputs(inputData) {
     };
 
     uploadContainers.forEach((ele,idx)=>{
-        if (["LoadImage","VHS_LoadVideo","ImagesPrompt_","LoadImagesToBatch"].includes(ele.getAttribute("comfyui_classtype"))){
+        if( ele.getAttribute("title") && ele.title=='模板图' ){
+            otherAdvancedContainer.appendChild(ele);
+        } else if (["LoadImage","VHS_LoadVideo","ImagesPrompt_","LoadImagesToBatch"].includes(ele.getAttribute("comfyui_classtype"))){
             container.appendChild(ele);
         } else {
             otherAdvancedContainer.appendChild(ele);
@@ -1705,8 +1709,8 @@ function createUI(data, share = true) {
     // leftDiv.appendChild(iconDes);
     // leftDiv.appendChild(des);
     leftDiv.appendChild(statusDiv);
-    leftDiv.append(advanced);
     leftDiv.appendChild(input1);
+    leftDiv.append(advanced);
     mainDiv.appendChild(submitButton);
 
     rightDiv.appendChild(output);
@@ -2363,6 +2367,7 @@ async function getPromptResult(category) {
         // 处理异常情况
     }
 }
+
 // 保存历史数据
 async function savePromptResult(data) {
     let url = get_url()
@@ -2392,8 +2397,6 @@ async function savePromptResult(data) {
         // 处理异常情况
     }
 }
-
-
 
 async function createHistoryList(category) {
     if (document.body.querySelector('#history_container')) document.body.querySelector('#history_container').remove();
@@ -2486,19 +2489,14 @@ async function createHistoryList(category) {
 }
 
 async function init_app() {
-
     const innerApp = checkIsInnerApp();
 
     if (!innerApp) {
         const { category, filename } = getFilenameAndCategoryFromUrl(location.href);
         window._apps = await get_my_app(category, filename);
-
         window._appData = window._apps[0];
-
         createAppList(window._apps);
-
         if (window._apps.length > 0) await createHistoryList(category || '');
-
         createApp(window._appData);
     }
 
@@ -2522,16 +2520,12 @@ function checkIsInnerApp() {
             const { init, url } = event.data;
 
             window._hostUrl = url;
-
             window._apps = init;
-
             window._appData = window._apps[0];
 
             if (window._appData) {
                 createAppList(window._apps, innerApp);
-
                 // await createHistoryList();
-
                 createApp(window._appData);
             } else {
                 // todo welcome页面
@@ -2541,12 +2535,9 @@ function checkIsInnerApp() {
 
 
         });
-
-
     }
 
     return innerApp == 1
-
 }
 
 function updateKSampler(KSampler_id, name, type, val){
@@ -2675,8 +2666,8 @@ function createDownloadEles(){
 }
 
 function dlBtnBind(btn_name, img_src){
-    var dl_btn=document.querySelector(".download_btn");
-    var dl_link=document.querySelector(".download_link");
+    const dl_btn=document.querySelector(".download_btn");
+    const dl_link=document.querySelector(".download_link");
     dl_btn.innerText=btn_name;
     dl_link.href=img_src;
     dl_link.download=img_src;
@@ -2694,8 +2685,9 @@ function arraySwap(arr, i, j){
  * @param {String} obj.method omit
  * @param {Object} obj.headers request headers
  * @param {Object} obj.body
+ * @param {String} windowPropertyName: window.property to store the response value
  */
-function syncRequest({url, method='POST', headers, body}){
+function syncJsonRequest({url, method='POST', headers, body}, windowPropertyName){
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, false);
     for (const key of Object.keys(headers)){
@@ -2704,7 +2696,7 @@ function syncRequest({url, method='POST', headers, body}){
     xhr.addEventListener("readystatechange",(e)=>{
         if (xhr.readyState===4 && xhr.status >= 200 && xhr.status < 400){
             const serverResponse = JSON.parse(xhr.response);
-            window.__mixlab_folderpaths_response=serverResponse;
+            window['windowPropertyName']=serverResponse;
         } else {
             throw new Error("XHR request Error!")
         }
@@ -2713,12 +2705,14 @@ function syncRequest({url, method='POST', headers, body}){
     xhr.send(requestBody);
 }
 
+// create prompt options at right bottom
 function createPromptSelections(){
     window.promptDict={
         background:"蓝",
         gender:"女",
         smile:"抿嘴笑",
-        age:"儿童"
+        age:"儿童",
+        suit:"商务正装"
     }
 
     const divContainer=document.createElement('div');
@@ -2743,32 +2737,26 @@ function createPromptSelections(){
         Array.from(["儿童","少年","壮年","老年"],o=>{return {value:o, text:o}}),
         "儿童","age"
     );
+    const [suitDiv, suitOptions] = createSelectWithOptions(
+        "服饰",
+        Array.from(["商务正装","校服正装"],o=>{return {value:o, text:o}}),
+        "商务正装","suit"
+    );
 
-    [backgroundDiv,genderDiv,smileDiv,ageDiv].forEach(ele=>divContainer.appendChild(ele));
+    [backgroundDiv,genderDiv,smileDiv,ageDiv,suitDiv].forEach(ele=>divContainer.appendChild(ele));
 
-    [
-        [backgroundOptions,'background'],
-        [genderOptions,'gender'],
-        [smileOptions,'smile'],
-        [ageOptions,'age'],
-    ].forEach(
-        ele=>{
-            const optionEle = ele[0];
-            ele[0].addEventListener('change',(event)=>{
-                event.preventDefault();
-                if (ele[1]=='background'){
-                    window.promptDict.background=optionEle.value;
-                } else if (ele[1]=='gender'){
-                    window.promptDict.gender=optionEle.value;
-                } else if (ele[1]=='smile'){
-                    // TODO: debug whether smile prompts is worked
-                    window.promptDict.smile=optionEle.value;
-                } else if (ele[1]=='age'){
-                    window.promptDict.age=optionEle.value;
-                }
-            })
-        }
-    )
+    for (const [key,optionEle] of Object.entries({
+        background: backgroundOptions,
+        gender: genderOptions,
+        smile: smileOptions,
+        age: ageOptions,
+        suit: suitOptions
+    })){
+        optionEle.addEventListener('change',(event)=>{
+            event.preventDefault();
+            window.promptDict[key]=optionEle.value;
+        })
+    }
 
     return divContainer;
 }
@@ -2780,8 +2768,9 @@ function valuePrompt(){
     const __background=window.promptDict.background;
     const __smile=window.promptDict.smile;
     const __age=window.promptDict.age;
+    const __suit=window.promptDict.suit;
 
-    var gender, background, smile;
+    var gender, background, smile, suit;
     if (__gender=='男'){
         if (__age=='儿童' || __age=='少年'){gender='a boy'}
         else if (__age=='壮年'){gender='a man'}
@@ -2800,17 +2789,23 @@ function valuePrompt(){
     else if (__smile=='露齿笑'){smile='smiling with teeth showing'}
     else if (__smile=='不笑'){smile='not smiling'}
 
-    const prompt=(
-        "A formal photo of "
-        + gender +
-        " wearing a formal suit, "
-        + smile +
-        ", and eyes directly looking at the camera with "
-        + background +
-        " background color;"
+    if (__suit=='商务正装'){suit='formal suit'}
+    else {suit='school uniform'}
+
+    //TODO: fucntion to upload explicit template graphic.
+
+    const prompt = (
+        `A formal photo of ${gender} wearing (a ${suit}:1.5), `
+        +`(${smile}:1.5), `
+        +`and eyes directly looking at the camera `
+        +`with ${background} color background; `
+        +` face exposed under the left and right camera flashlights.`
     );
     console.log(`positive prompt ready to set: ${prompt}`)
+    const __temp=__gender == "男"?"male":"female";
 
+    // upload template graphic
+    uploadTemplate({__temp, background, suit});
     // 直接赋值给高级设置内的prompt设置，再触发textarea的change事件（图方便）
     try {
         window._positive_textarea.value=prompt;
@@ -2818,4 +2813,21 @@ function valuePrompt(){
     } catch (error) {
         console.log(error)
     }
+}
+
+/**
+ * function to upload explicit template graphic.
+ * @param {Object} obj
+ * @param {String} obj.gender
+ * @param {String} obj.background
+ * @param {String} obj.suit
+ */
+function uploadTemplate({ gender, background, suit }){
+    const templateImgEle = document.querySelector('[title=模板图]');
+    if (!templateImgEle){return}
+    templateImgEle.querySelector("img").src=(
+        `${get_url()}/mixlab/templateGraphics`
+        +`?background=${background}&gender=${gender}&suit=${suit}`
+    );
+
 }
