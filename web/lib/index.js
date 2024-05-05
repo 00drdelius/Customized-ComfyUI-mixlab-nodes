@@ -2805,7 +2805,7 @@ function valuePrompt(){
     const __temp=__gender == "男"?"male":"female";
 
     // upload template graphic
-    uploadTemplate({__temp, background, suit});
+    uploadTemplate({gender: __temp, background, suit});
     // 直接赋值给高级设置内的prompt设置，再触发textarea的change事件（图方便）
     try {
         window._positive_textarea.value=prompt;
@@ -2824,6 +2824,8 @@ function valuePrompt(){
  */
 function uploadTemplate({ gender, background, suit }){
     const templateImgEle = document.querySelector('[title=模板图]');
+
+    // prevent from this function triggerred when the valuePrompt function invoked at the first time.
     if (!templateImgEle){return}
     templateImgEle.querySelector("img").src=(
         `${get_url()}/mixlab/templateGraphics`

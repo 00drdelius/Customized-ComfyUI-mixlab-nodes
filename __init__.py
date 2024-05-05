@@ -577,35 +577,37 @@ async def post_prompt_result(request:web.Request):
     
     return web.json_response({"result":res})
 
+templateDir=os.path.join(current_path,'templates')
+generateTemplPath=lambda filename : os.path.join(templateDir, (filename if '.' in filename else filename+".jpg"))
 templateGraphics={
   "white": {
     "male": {
-      "formal suit": "...photoPath",
-      "school uniform": "...photoPath"
+      "formal suit": generateTemplPath("white_male_suit.jpg"),
+      "school uniform": generateTemplPath("white_male_suit.jpg") # 暂未找到male_uniform
     },
     "female": {
-      "formal suit": "...photoPath",
-      "school uniform": "...photoPath"
+      "formal suit": generateTemplPath("white_female_suit.jpg"),
+      "school uniform": generateTemplPath("white_female_uniform.jpg")
     }
   },
   "blue": {
     "male": {
-      "formal suit": "...photoPath",
-      "school uniform": "...photoPath"
+      "formal suit": generateTemplPath("blue_male_suit.jpg"),
+      "school uniform": generateTemplPath("blue_male_suit.jpg") # 暂未找到male_uniform
     },
     "female": {
-      "formal suit": "...photoPath",
-      "school uniform": "...photoPath"
+      "formal suit": generateTemplPath("blue_female_suit.jpg"),
+      "school uniform": generateTemplPath("blue_female_uniform.jpg")
     }
   },
   "red": {
     "male": {
-      "formal suit": "...photoPath",
-      "school uniform": "...photoPath"
+      "formal suit": generateTemplPath("red_male_suit.jpg"),
+      "school uniform": generateTemplPath("red_male_suit.jpg") # 暂未找到male_uniform
     },
     "female": {
-      "formal suit": "...photoPath",
-      "school uniform": "...photoPath"
+      "formal suit": generateTemplPath("red_female_suit.jpg"),
+      "school uniform": generateTemplPath("red_female_uniform.jpg")
     }
   }
 }
@@ -623,9 +625,9 @@ async def fetchTemplate(request:web.Request):
     buffer=io.BytesIO()
     with Image.open(imgPath, 'r') as imgF:
         img=imgF.convert("RGB")
-        img.save(buffer,format='png')
+        img.save(buffer,format='jpeg')
     buffer.seek(0)
-    return web.Response(body=buffer,status=200,content_type=f"img/png")
+    return web.Response(body=buffer,status=200,content_type=f"img/jpg")
 
 ### test
 @routes.get("/mixlab/test")
