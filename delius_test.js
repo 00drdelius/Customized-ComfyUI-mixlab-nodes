@@ -661,3 +661,37 @@ function createUI(data, share = true) {
         },
     };
 }
+
+function test1(){
+    const ele = document.createElement('input');
+    ele.type='file';
+    ele.addEventListener("change",(event)=>{
+        console.log(event);
+    });
+    ele.dispatchEvent(new Event('change'));
+}
+
+
+/**
+ * function to upload explicit template graphic.
+ * @param {Object} obj
+ * @param {String} obj.gender
+ * @param {String} obj.background
+ * @param {String} obj.suit
+ */
+function uploadTemplate({ gender, background, suit }){
+    const templateImgEle = document.querySelector('[title=模板图]');
+
+    // prevent from this function triggerred when the valuePrompt function invoked at the first time.
+    if (!templateImgEle){return}
+    else{
+        const file = "";
+        const reader = new FileReader();
+
+    }
+    templateImgEle.querySelector("img").src=(
+        `${get_url()}/mixlab/templateGraphics`
+        +`?background=${background}&gender=${gender}&suit=${suit}`
+    );
+
+}

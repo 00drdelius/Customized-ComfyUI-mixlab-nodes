@@ -809,6 +809,9 @@ function createInputs(inputData) {
             nameLabel.style.marginBottom = '12px'
 
             uploadContainer.setAttribute("title",nameLabel.textContent);
+            if (nameLabel.textContent=='模板图'){
+                window.templateNodeId = data.id;
+            }
             uploadContainer.appendChild(nameLabel);
 
             let actionDiv = document.createElement('div');
@@ -821,6 +824,7 @@ function createInputs(inputData) {
             const uploadImageInputHide = document.createElement('input');
             uploadImageInputHide.type = "file";
             uploadImageInputHide.style.display = "none"
+
             actionDiv.appendChild(uploadImageInput);
             actionDiv.appendChild(uploadImageInputHide);
 
@@ -2687,16 +2691,18 @@ function arraySwap(arr, i, j){
  * @param {Object} obj.body
  * @param {String} windowPropertyName: window.property to store the response value
  */
-function syncJsonRequest({url, method='POST', headers, body}, windowPropertyName){
+function syncJsonRequest({url, method='POST', headers=null, body}, windowPropertyName=null){
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, false);
-    for (const key of Object.keys(headers)){
-        xhr.setRequestHeader(key,headers[key]);
-    };
+    if (headers){
+        for (const key of Object.keys(headers)){
+            xhr.setRequestHeader(key,headers[key]);
+        };
+    }
     xhr.addEventListener("readystatechange",(e)=>{
         if (xhr.readyState===4 && xhr.status >= 200 && xhr.status < 400){
             const serverResponse = JSON.parse(xhr.response);
-            window['windowPropertyName']=serverResponse;
+            if (windowPropertyName){window[windowPropertyName]=serverResponse;}
         } else {
             throw new Error("XHR request Error!")
         }
@@ -2802,10 +2808,8 @@ function valuePrompt(){
         +` face exposed under the left and right camera flashlights.`
     );
     console.log(`positive prompt ready to set: ${prompt}`)
-    const __temp=__gender == "男"?"male":"female";
-
     // upload template graphic
-    uploadTemplate({gender: __temp, background, suit});
+    uploadTemplate({gender: __gender == "男"?"male":"female", background, suit: suit=='formal suit'?"suit":"uniform"});
     // 直接赋值给高级设置内的prompt设置，再触发textarea的change事件（图方便）
     try {
         window._positive_textarea.value=prompt;
@@ -2824,12 +2828,13 @@ function valuePrompt(){
  */
 function uploadTemplate({ gender, background, suit }){
     const templateImgEle = document.querySelector('[title=模板图]');
-
+    const templateName = `${background}_${gender}_${suit}.jpg`;
     // prevent from this function triggerred when the valuePrompt function invoked at the first time.
     if (!templateImgEle){return}
+
     templateImgEle.querySelector("img").src=(
         `${get_url()}/mixlab/templateGraphics`
         +`?background=${background}&gender=${gender}&suit=${suit}`
     );
-
+    window._appData.data[window.templateNodeId].inputs.image=templateName;
 }

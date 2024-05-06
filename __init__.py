@@ -582,32 +582,32 @@ generateTemplPath=lambda filename : os.path.join(templateDir, (filename if '.' i
 templateGraphics={
   "white": {
     "male": {
-      "formal suit": generateTemplPath("white_male_suit.jpg"),
-      "school uniform": generateTemplPath("white_male_suit.jpg") # 暂未找到male_uniform
+      "suit": generateTemplPath("white_male_suit.jpg"),
+      "uniform": generateTemplPath("white_male_suit.jpg") # 暂未找到male_uniform
     },
     "female": {
-      "formal suit": generateTemplPath("white_female_suit.jpg"),
-      "school uniform": generateTemplPath("white_female_uniform.jpg")
+      "suit": generateTemplPath("white_female_suit.jpg"),
+      "uniform": generateTemplPath("white_female_uniform.jpg")
     }
   },
   "blue": {
     "male": {
-      "formal suit": generateTemplPath("blue_male_suit.jpg"),
-      "school uniform": generateTemplPath("blue_male_suit.jpg") # 暂未找到male_uniform
+      "suit": generateTemplPath("blue_male_suit.jpg"),
+      "uniform": generateTemplPath("blue_male_suit.jpg") # 暂未找到male_uniform
     },
     "female": {
-      "formal suit": generateTemplPath("blue_female_suit.jpg"),
-      "school uniform": generateTemplPath("blue_female_uniform.jpg")
+      "suit": generateTemplPath("blue_female_suit.jpg"),
+      "uniform": generateTemplPath("blue_female_uniform.jpg")
     }
   },
   "red": {
     "male": {
-      "formal suit": generateTemplPath("red_male_suit.jpg"),
-      "school uniform": generateTemplPath("red_male_suit.jpg") # 暂未找到male_uniform
+      "suit": generateTemplPath("red_male_suit.jpg"),
+      "uniform": generateTemplPath("red_male_suit.jpg") # 暂未找到male_uniform
     },
     "female": {
-      "formal suit": generateTemplPath("red_female_suit.jpg"),
-      "school uniform": generateTemplPath("red_female_uniform.jpg")
+      "suit": generateTemplPath("red_female_suit.jpg"),
+      "uniform": generateTemplPath("red_female_uniform.jpg")
     }
   }
 }

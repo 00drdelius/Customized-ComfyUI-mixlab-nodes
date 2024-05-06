@@ -31,3 +31,7 @@
   > 1. 设置获取历史生成结果为10个 (get_prompt_result)
   > 2. 设置web route: /mixlab/test（2024.5.1）
   >
+
+
+### Alert!!
+Graphics in templates dir should all be copied into ComfyUI/input dir !!! (2024.5.6)
