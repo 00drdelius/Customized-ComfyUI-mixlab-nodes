@@ -142,7 +142,7 @@ em .toggle:hover {
     color: white;
     display: flex;
     width: fit-content;
-    padding: 4px;
+    padding: 5px 80px;
     font-size: 12px;
 
 }

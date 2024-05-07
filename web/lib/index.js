@@ -820,7 +820,7 @@ function createInputs(inputData) {
             // Create an input field for the image name
             const uploadImageInput = document.createElement("button");
             uploadImageInput.style = `width: 88px;`;
-            uploadImageInput.innerText = 'upload'
+            uploadImageInput.innerText = '上传图片';
             const uploadImageInputHide = document.createElement('input');
             uploadImageInputHide.type = "file";
             uploadImageInputHide.style.display = "none"
@@ -830,7 +830,7 @@ function createInputs(inputData) {
 
             const btnFromClipboard = document.createElement("button");
             btnFromClipboard.style = `width: 156px; margin-left: 18px;`
-            btnFromClipboard.innerText = 'paste from clipboard'
+            btnFromClipboard.innerText = '粘贴板粘贴'
             if (!isVideoUpload) actionDiv.appendChild(btnFromClipboard);
 
             const btnForImageEdit = document.createElement("button");
@@ -1556,8 +1556,8 @@ function createUI(data, share = true) {
 
     let leftDetails = document.createElement('details');
     leftDetails.setAttribute('open', 'true')
-    leftDetails.id = 'app_input_pannel'
-    leftDetails.innerHTML = `<summary>INPUT</summary>
+    leftDetails.id = 'app_input_panel'
+    leftDetails.innerHTML = `<summary>输入</summary>
         <div class="content"></div>`;
     leftDetails.style.width="60%";
     let leftDiv = leftDetails.querySelector('.content');
@@ -1623,7 +1623,7 @@ function createUI(data, share = true) {
 
     try {
         if (Object.keys(seed).length > 0) {
-            seeds.innerHTML = `<summary>SEED</summary>
+            seeds.innerHTML = `<summary>随机种子</summary>
         <div class="content"> </div>`;
             const content = seeds.querySelector('.content')
             for (const id in seed) {
@@ -1683,7 +1683,7 @@ function createUI(data, share = true) {
     advanced.style="margin-bottom: 20px; width:100%";
     advanced.className="advanced-config";
     let advanced_title=document.createElement("summary");
-    advanced_title.innerText="高级设置";
+    advanced_title.innerText="高级设置(请不要随意修改内部参数)";
     const kconfigEle=createKsampler(data);
     advanced.appendChild(advanced_title);
     advanced.appendChild(kconfigEle);
@@ -1705,7 +1705,7 @@ function createUI(data, share = true) {
 
     // 创建提交按钮
     var submitButton = document.createElement('button');
-    submitButton.textContent = 'Create';
+    submitButton.textContent = '生成照片';
     submitButton.className = 'run_btn';
 
     // 将所有UI元素添加到页面中
@@ -1922,22 +1922,22 @@ function createUI(data, share = true) {
                     if (!submitButton.classList.contains('disabled')) {
                         runFn && runFn();
                         submitButton.classList.add('disabled');
-                        submitButton.innerText = 'Cancel'
+                        submitButton.innerText = '取消任务'
                     } else {
                         // 如果能取消
                         let canCancel = cancelFn && cancelFn();
                         if (canCancel) submitButton.classList.remove('disabled');
-                        if (canCancel) submitButton.innerText = 'Create';
+                        if (canCancel) submitButton.innerText = '生成照片';
                     }
 
                 });
             },
             running: () => {
-                submitButton.innerText = 'Cancel';
+                submitButton.innerText = '取消任务';
                 if (!submitButton.classList.contains('disabled')) submitButton.classList.add('disabled');
             },
             reset: () => {
-                submitButton.innerText = 'Create';
+                submitButton.innerText = '生成照片';
                 submitButton.classList.remove('disabled');
                 submitButton.classList.remove('data-click');
             }
@@ -2115,7 +2115,7 @@ async function createApp(appData, share = false) {
     api.addEventListener("status", ({ detail }) => {
         console.log("status", detail, detail?.exec_info?.queue_remaining);
         try {
-            ui.status.update(`queue#${detail.exec_info?.queue_remaining}`);
+            ui.status.update(`任务队列#${detail.exec_info?.queue_remaining}`);
             window.parent.postMessage({ cmd: 'status', data: `queue#${detail.exec_info?.queue_remaining}` }, '*');
             if (detail.exec_info?.queue_remaining === 0) {
                 // 运行按钮重设
@@ -2593,7 +2593,7 @@ function createKsampler(data){
     em.appendChild(emText);
 
     var steps=createNumSlide(
-        `steps`, 50,
+        `steps`, 40,
         (newSteps)=>updateKSampler(KSamplerId,"steps",'int',newSteps),
         0,100, 'int',
         null, null,
