@@ -2801,11 +2801,11 @@ function valuePrompt(){
     //TODO: fucntion to upload explicit template graphic.
 
     const prompt = (
-        `A formal photo of ${gender} wearing (a ${suit}:1.5), `
-        +`(${smile}:1.5), `
-        +`and eyes directly looking at the camera `
-        +`with ${background} color background; `
-        +` face exposed under the left and right camera flashlights.`
+        `A formal photo of ${gender},`
+        +` (wearing a ${suit}:1.5),`
+        +` (${smile}:1.5), `
+        +` (${background} background:1.5),`
+        +` (PhotoRealistic:1.5), photography lighting, best quality, (Facing the camera:1.5)`
     );
     console.log(`positive prompt ready to set: ${prompt}`)
     // upload template graphic
